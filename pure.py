@@ -7,36 +7,53 @@ class Pure(Node):
         self.server  = server
         self.request = None
         self.reponse = None
-        self.waitfor = None
-    
+        self.buffer  = []
+        self.attempt = 0
+   
     def getFrame(self, frame):
         self.reponse = frame
+        self.emptyBuffer()
     
     def emptyBuffer(self):
-        if self.request is None or self.reponse is None:
+        if self.canProcess():
             return
         
         SUCSESSFUL = self.request.message == self.reponse.message
         
         if SUCSESSFUL:
             self.resetDefault()
+            log("Frame delivered, %d attempts" % self.attempt, self, OKGREEN)
         else:
-            self.waitfor = getRandomTime()
-        
-        return SUCSESSFUL
-    
+            
+            newTime = self.request.getFrameTime() + getRandomTime() + FRAME_TIME
+            self.request.setTime(newTime)
+            if self.attempt % PRINT_ATTEMPT == 0:
+                log("Frame not delivered", self, FAIL)
+            self.attempt += 1
+
     def resetDefault(self):
         self.request  = None
         self.response = None
-        self.waitfor  = None
 
     def sendFrame(self):
         if not self.request is None:
-            server.getFrame(self.request)
+            self.server.addRequest(self.request)
+        else:
+            try:
+                self.request = self.buffer.pop(0)
+                log("new Frame ready to sent from buffer", self, OKCYAN)
+                self.sendFrame()
+            except:
+                pass
+                
 
     def addFrame(self, frame):
         if self.request is None:
             self.request = frame
-            log("new Frame ready to sent", self)
+            log("new Frame ready to sent", self, OKCYAN)
         else:
-            log("cant add new frame", self) 
+            self.buffer.append(frame)
+            log("cant add new frame, buffered in memory", self, WARNING)
+
+    def canProcess(self):
+        return self.request is None or self.reponse is None

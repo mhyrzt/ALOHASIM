@@ -12,10 +12,7 @@ class Server(Node):
         self.slaves += [slave]
     
     def sortRequests(self):
-        self.requests = sorted(
-            self.requests, 
-            key = lambda x: x.time_at
-            )
+        pass
     
     def addRequest(self, frame):
         self.requests += [frame]
@@ -25,8 +22,10 @@ class Server(Node):
         start_time = frame.getFrameTime()
         end_time   = start_time + FRAME_TIME
         collisions = []
-
+        
         for f in self.requests:
+            if f == frame:
+                continue
             if end_time > f.getFrameTime():
                 collisions += [f]
         
@@ -50,7 +49,7 @@ class Server(Node):
                 sender.getFrame(response)
         
         for frame in processed:
-            self.requests.remove(frame)
-
-    def getFrame(self, frame):
-        self.requests += [frame]
+            try:
+                self.requests.remove(frame)
+            except:
+                pass

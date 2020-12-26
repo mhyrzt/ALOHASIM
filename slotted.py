@@ -19,7 +19,7 @@ class Slotted(Node):
         if SUCSESSFUL:
             self.resetDefault()
         else:
-            self.waitfor = getRandomTime()
+            pass
         
         return SUCSESSFUL
     
@@ -30,11 +30,11 @@ class Slotted(Node):
     
     def sendFrame(self):
         if not self.request is None:
-            server.getFrame(self.request)
+            server.addRequest(self.request)
         
     def addFrame(self, frame):
         if self.request is None:
             self.request = frame
-            log("new Frame ready to sent", self)
+            log("new Frame ready to sent", self, OKCYAN)
         else:
-            log("cant add new frame", self) 
+            log("cant add new frame", self, WARNING) 
