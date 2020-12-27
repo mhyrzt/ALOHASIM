@@ -8,7 +8,7 @@ class Pure(Node):
         self.request = None
         self.reponse = None
         self.buffer  = []
-        self.attempt = 0
+        self.attempt = 1
    
     def getFrame(self, frame):
         self.reponse = frame
@@ -21,8 +21,8 @@ class Pure(Node):
         SUCSESSFUL = self.request.message == self.reponse.message
         
         if SUCSESSFUL:
-            self.resetDefault()
             log("Frame delivered, %d attempts" % self.attempt, self, OKGREEN)
+            self.resetDefault()
         else:
             
             newTime = self.request.getFrameTime() + getRandomTime() + FRAME_TIME
@@ -34,6 +34,7 @@ class Pure(Node):
     def resetDefault(self):
         self.request  = None
         self.response = None
+        self.attempt  = 1
 
     def sendFrame(self):
         if not self.request is None:

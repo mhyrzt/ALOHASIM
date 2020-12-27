@@ -10,7 +10,7 @@ ITS_SERVER = True
 MIN_TIME =  200 #ms 
 MAX_TIME = 5000 #ms
 
-NODE_NUMBERS = 4 # MAX 36 for best visualization
+NODE_NUMBERS = 18 # MAX 36 for best visualization
 NODE_NUMBERS = range(NODE_NUMBERS)
 NODE_RADIUS  = 35
 NODE_WIDTH   = 1
@@ -35,7 +35,7 @@ PURE    = "PURE"
 SLOTTED = "SLOTTED"
 
 SIMULATION    = PURE
-PRINT_ATTEMPT = 50
+PRINT_ATTEMPT = len(NODE_NUMBERS) ** 2
 
 HEADER  = '\033[95m'
 OKBLUE  = '\033[94m'
