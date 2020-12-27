@@ -6,7 +6,8 @@ class Node:
         self.pos    = None
         self.color  = COLOR_SERVER if is_server else COLOR_NODE
         self.screen = screen
-        
+        self.type   = is_server
+     
     def printG(self):
         pygame.draw.circle(
             self.screen , 

@@ -1,22 +1,20 @@
 from consts import *
 from node import Node 
 from frame import Frame
-
+from log import Log
 class Server(Node):
     def __init__(self, screen):
         super().__init__("SERVER", screen, ITS_SERVER)
         self.slaves   = []
         self.requests = [] # Frames
-    
+        self.logs     = []
+        self.simtime  = getTime()
+        
     def addSlave(self, slave):
         self.slaves += [slave]
     
-    def sortRequests(self):
-        pass
-    
     def addRequest(self, frame):
         self.requests += [frame]
-        self.sortRequests()
     
     def checkCollision(self, frame):
         start_time = frame.getFrameTime()
@@ -30,10 +28,10 @@ class Server(Node):
                 collisions += [f]
         
         if collisions == []:
-            new_frame = Frame(self, frame.message)
+            new_frame = Frame(self, frame.message, frame.sender)
             return new_frame, False, [frame]
         
-        colission_frame = Frame(self, Frame.collision(*collisions))
+        colission_frame = Frame(self, Frame.collision(*collisions), collisions)
         return colission_frame, True, collisions
     
     def processRequests(self):
@@ -42,6 +40,7 @@ class Server(Node):
         for frame in self.requests:
             if frame in processed:
                 continue
+            
             response, error, frames = self.checkCollision(frame)
             for f in frames:
                 processed += [f]
@@ -53,3 +52,13 @@ class Server(Node):
                 self.requests.remove(frame)
             except:
                 pass
+    
+    def addLog(self, log):
+        log.setTime(self.simtime)
+        self.logs += [log]
+    
+    def getLog(self):
+        return self.logs
+
+    def showLogs(self):
+        pass

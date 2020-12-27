@@ -108,3 +108,11 @@ def eventsHandler():
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
+
+def processFinished(nodes):
+    for node in nodes:
+        if node.buffer == [] and node.request is None:
+            continue
+        else:
+            return False
+    return True
