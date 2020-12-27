@@ -26,21 +26,17 @@ if __name__ == "__main__":
         nodes.append(node)
         srvr.addSlave(node)
     
-    
     for f in getFrames():
-        frame = Frame(nodes[f[0]], f[1], f[2], srvr) 
-        nodes[f[0]].addFrame(frame)
-
-    logs = []
-    while processFinished(nodes):
-        processNodes(nodes)
-        srvr.processRequests() 
+        frame = Frame(nodes[f[0]], f[1], f[2]) 
+        nodes[f[0]].addFrame(frame)    
     
     while True:
         eventsHandler()
         screen.fill(COLOR_BLACK)
         
         drawNodes(nodes, srvr)
+        processNodes(nodes)
+        srvr.processRequests()
 
         pygame.display.update()
         pygame.time.delay(DELAY_TIME)
