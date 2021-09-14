@@ -1,2 +1,2 @@
 # ALOHA SIMULATION
-WORKING ! 
+Simple Graphical Simulation of ALOHA protocol with python.
